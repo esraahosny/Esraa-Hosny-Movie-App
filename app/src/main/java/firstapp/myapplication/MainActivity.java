@@ -16,15 +16,15 @@ boolean isTwopane;
           //movieFragment.setPosterListener(this);
         getSupportFragmentManager().beginTransaction().add(R.id.activity, movieFragment).commit();
 
-        if(null!= findViewById(R.id.detail_activity))
-            //tablet
-        isTwopane = true;
-        else
-        {
-            //mobile phone
-
-        }
-    }
+//        if(null!= findViewById(R.id.detail_activity))
+//            //tablet
+//        isTwopane = true;
+//        else
+//        {
+//            //mobile phone
+//
+//        }
+   }
 
    // @Override
    // public void setSelectedPosterPath(String image) {

@@ -17,6 +17,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -46,6 +47,7 @@ public class DetailFragment extends Fragment {
     String idmovie;
     TextView tvReviewData;
     String Poster_key;
+    FrameLayout trailersContainer;
 
     @TargetApi(Build.VERSION_CODES.M)
     @Override
@@ -66,8 +68,7 @@ public class DetailFragment extends Fragment {
         final View view = inflater.inflate(R.layout.detail_item, container, false);
         final Intent intent = getActivity().getIntent();       //intent Bundle to get data
         idmovie = intent.getExtras().getString("id");
-
-        // image of each movie poster
+              // image of each movie poster
         ImageView posterpath = (ImageView) view.findViewById(R.id.posterpathtv);
         //text views of info from grid view
         TextView title = (TextView) view.findViewById(R.id.titletv);
@@ -78,7 +79,7 @@ public class DetailFragment extends Fragment {
         tvReviewData = (TextView) view.findViewById(R.id.textViewReviews);
         TextView reviewText = (TextView) view.findViewById(R.id.reviewText);
         Button starbutton = (Button) view.findViewById(R.id.starbutton);
-        Button delete = (Button)view.findViewById(R.id.button2);
+        Button delete = (Button) view.findViewById(R.id.button2);
 
         // Bundle sentBundle = getArguments();
         // String name = sentBundle.getString("i");
@@ -107,7 +108,7 @@ public class DetailFragment extends Fragment {
         voteAverage.setText(average);
 
 
-       //save movie
+        //save movie
         starbutton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -121,39 +122,47 @@ public class DetailFragment extends Fragment {
                     //  db.Delete_moview(idmovie);
                 }
             }
-            });
-       delete.setOnClickListener(new View.OnClickListener() {
-    @Override
-    public void onClick(View v) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        builder.setTitle("Do you want to delete this movie");
-        builder.setPositiveButton("YES", new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int which) {
-                // Do nothing but close the dialog
-                dbf.Delete_moview(idmovie);
-                dialog.dismiss();
-            }
         });
-        builder.setNegativeButton("NO", new DialogInterface.OnClickListener() {
+        delete.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(DialogInterface dialog, int which) {
-                // Do nothing
-                Toast.makeText(getActivity(), "movie still exists", Toast.LENGTH_SHORT).show();
-                dialog.dismiss();
+            public void onClick(View v) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                builder.setTitle("Do you want to delete this movie");
+                builder.setPositiveButton("YES", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        // Do nothing but close the dialog
+                        dbf.Delete_moview(idmovie);
+                        dialog.dismiss();
+                    }
+                });
+                builder.setNegativeButton("NO", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        // Do nothing
+                        Toast.makeText(getActivity(), "movie still exists", Toast.LENGTH_SHORT).show();
+                        dialog.dismiss();
+                    }
+                });
+
+                AlertDialog alert = builder.create();
+                alert.show();
             }
         });
-
-        AlertDialog alert = builder.create();
-        alert.show();
-    }
-});
 
         movieAdapter2 = new MovieAdapter2(getActivity(), listVideos);
         lvTrailers.setAdapter(movieAdapter2);
+        lvTrailers.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                TrailerData trailerData = listVideos.get(position);
+                String SemiPartVideoUrl = trailerData.getKey();
+                Intent intent1 = new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.youtube.com/watch?v=" + SemiPartVideoUrl));
+                startActivity(intent1);
+                //Toast.makeText(getContext(),"trailer",Toast.LENGTH_SHORT).show();
+            }
+        });
 
-
-        // lvTrailers.setAdapter(movieAdapter2);
-        lvTrailers.setOnTouchListener(new View.OnTouchListener() {
+       lvTrailers.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 int action = event.getAction();
@@ -182,16 +191,7 @@ public class DetailFragment extends Fragment {
         //https://www.youtube.com/watch?v=FnZF82_3Cts
         Log.v("backid", idmovie);
         //  Log.i("Esraa", String.valueOf(listVideos.get(1)));
-        lvTrailers.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                TrailerData trailerData = listVideos.get(position);
-                String SemiPartVideoUrl = trailerData.getKey();
-                Log.i("check value", SemiPartVideoUrl);
-                Intent intent1 = new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.youtube.com/watch?v=" + SemiPartVideoUrl));
-                startActivity(intent1);
-            }
-        });
+
 
         //reviews part
         JsonTask3 jsonTask3 = new JsonTask3();
@@ -201,6 +201,7 @@ public class DetailFragment extends Fragment {
         return view;
 
     }
+
     public class JsonTask2 extends AsyncTask<String, Void, List<TrailerData>> {
         //log part to check data
         private final String LOG = JsonTask2.class.getSimpleName();
@@ -208,7 +209,7 @@ public class DetailFragment extends Fragment {
 
         //doInBackground part contains connection + url of api + exception handlers
         protected List<TrailerData> doInBackground(String... params) {
-            Log.v("nnnn","inback");
+            Log.v("nnnn", "inback");
             //initialization of variables
             HttpURLConnection connection = null;
             BufferedReader reader = null;
@@ -216,7 +217,7 @@ public class DetailFragment extends Fragment {
 
             try {
                 URL url = new URL(params[0]);
-                Log.v("nnnn1",url.toString());
+                Log.v("nnnn1", url.toString());
                 //"https://api.themoviedb.org/3/movie/popular?api_key=6be3beeecf3e73c7baf052936de346da"
                 connection = (HttpURLConnection) url.openConnection();
                 connection.setRequestMethod("GET");
@@ -225,7 +226,7 @@ public class DetailFragment extends Fragment {
                 reader = new BufferedReader(new InputStreamReader(stream));
 
                 if (stream == null) {
-                    Log.v("nnnn2","stream null");
+                    Log.v("nnnn2", "stream null");
                     return null;
                 }
 
@@ -241,18 +242,16 @@ public class DetailFragment extends Fragment {
                     return null;
                 }
                 finaljson = buffer.toString();
-                Log.v("jsonstr",idmovie+"\n"+finaljson);
+                Log.v("jsonstr", idmovie + "\n" + finaljson);
 
-            }
-            catch (IOException e1) {
-                Log.v("nnnn3","Excp3");
+            } catch (IOException e1) {
+                Log.v("nnnn3", "Excp3");
 
                 Log.e(LOG, "error", e1);
 
                 return null;
 
-            }
-            finally {
+            } finally {
                 if (connection != null) {
                     connection.disconnect();
                 }
@@ -263,13 +262,13 @@ public class DetailFragment extends Fragment {
                     } catch (IOException ioe) {
                         //log statement or any message
                         Log.e(LOG, "error", ioe);
-                        Log.v("nnnn4","excp4");
+                        Log.v("nnnn4", "excp4");
 
                     }
                 }
 
                 try {
-                    Log.v("nnn1","send str");
+                    Log.v("nnn1", "send str");
                     return getData(finaljson);
                 } catch (JSONException e) {
                     //e.printStackTrace();
@@ -279,9 +278,10 @@ public class DetailFragment extends Fragment {
             }
 
         }
+
         private List<TrailerData> getData(String jsontoString) throws JSONException {
 
-            Log.v("nnn2","jsonstart");
+            Log.v("nnn2", "jsonstart");
             JSONObject movieJson = new JSONObject(jsontoString);
             JSONArray trailerArray = movieJson.getJSONArray("results");
 
@@ -302,17 +302,17 @@ public class DetailFragment extends Fragment {
                 Log.v("id", TrailerID);
                 Log.v("jsonkey", finalObject.getString(key));
             }
-            Log.v("nnn3","jsonfinished");
+            Log.v("nnn3", "jsonfinished");
 
             return listVideos;
 
         }
 
-       @Override
+        @Override
         protected void onPostExecute(List<TrailerData> trailerDatas) {
-           super.onPostExecute(trailerDatas);
-           movieAdapter2.notifyDataSetChanged();
-          // movieAdapter2 = new MovieAdapter2(getActivity(), listVideos);
+            super.onPostExecute(trailerDatas);
+            movieAdapter2.notifyDataSetChanged();
+            // movieAdapter2 = new MovieAdapter2(getActivity(), listVideos);
         }
     }
 
@@ -330,7 +330,7 @@ public class DetailFragment extends Fragment {
 
 
             try {
-                Log.v("rev","Started");
+                Log.v("rev", "Started");
                 URL url = new URL("https://api.themoviedb.org/3/movie/" + idmovie + "/reviews?api_key=6be3beeecf3e73c7baf052936de346da");
                 connection = (HttpURLConnection) url.openConnection();
                 connection.setRequestMethod("GET");
@@ -358,8 +358,7 @@ public class DetailFragment extends Fragment {
                 Log.e(LOG, "error", e1);
                 return null;
 
-            }
-            finally {
+            } finally {
                 if (connection != null) {
                     connection.disconnect();
                 }
@@ -387,9 +386,9 @@ public class DetailFragment extends Fragment {
         @Override
         protected void onPostExecute(List<ReviewsData> reviewsDatas) {
             super.onPostExecute(reviewsDatas);
-            String revs="";
-            for (int i=0; i<reviewsDatas.size();i++){
-                revs+=reviewsDatas.get(i).getContent();
+            String revs = "";
+            for (int i = 0; i < reviewsDatas.size(); i++) {
+                revs += reviewsDatas.get(i).getContent();
             }
             tvReviewData.setText(revs);
         }
@@ -405,7 +404,7 @@ public class DetailFragment extends Fragment {
                 JSONObject finalObject = movieArray.getJSONObject(i);
                 ReviewsData r = new ReviewsData();
                 r.setContent(finalObject.getString(ReviewContent));
-                Log.v("revs",finalObject.getString(ReviewContent));
+                Log.v("revs", finalObject.getString(ReviewContent));
                 listReviews.add(r);
 
             }

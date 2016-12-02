@@ -92,22 +92,18 @@
 
 
 
-<FrameLayout
-    android:id="@+id/FTrailerList"
-    android:layout_width="match_parent"
-    android:layout_height="300dp"
-    android:layout_below="@+id/trailers_title_view">
+
     <ListView
         android:layout_width="match_parent"
+        android:layout_below="@id/trailers_title_view"
         android:layout_height="match_parent"
         android:id="@+id/listViewVideo"
        />
-</FrameLayout>
     <TextView
         android:id="@+id/reviewText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/FTrailerList"
+        android:layout_below="@+id/listViewVideo"
         android:layout_marginStart="0dp"
         android:textSize="20sp"
         android:text="Reviews"
