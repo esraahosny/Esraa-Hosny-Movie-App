@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="firstapp.myapplication.Splash">
+
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:id="@+id/textView2"
+        android:background="#fa5151"
+        android:layout_alignParentTop="true"
+        android:layout_alignStart="@+id/imageView1" />
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="400dp"
+        android:id="@+id/imageView1"
+        android:layout_marginTop="50dp"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true" />
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Play"
+        android:id="@+id/button"
+        android:background="#f9f6f6"
+        android:textColor="#fe2626"
+        android:textSize="@dimen/abc_action_bar_content_inset_material"
+        android:layout_above="@+id/tv"
+        android:layout_centerHorizontal="true" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:id="@+id/tv"
+        android:background="#fa5151"
+        android:layout_alignParentBottom="true"
+        android:layout_alignStart="@+id/imageView1" />
+
+
+
+</RelativeLayout>
