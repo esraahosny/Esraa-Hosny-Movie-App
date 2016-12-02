@@ -31,7 +31,8 @@ import java.util.List;
 /**
  * A placeholder fragment containing a simple view.
  */
-public class MovieFragment extends Fragment {
+public class MovieFragment extends Fragment  {
+
 
     public MovieAdapter1 movieAdapter1;
     public List<Movie> arrayList = new ArrayList<>();
@@ -40,6 +41,11 @@ public class MovieFragment extends Fragment {
     ArrayList<Movie> arrayList_Fav_movie = new ArrayList<>();
     String ids;
 
+//    private SelectPosterPathListener selectPosterPathListener;
+//    void setPosterListener(SelectPosterPathListener selectPosterPathListener)
+//    {
+//        this.selectPosterPathListener = selectPosterPathListener;
+//    }
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -73,7 +79,10 @@ public class MovieFragment extends Fragment {
                 if (arrayList.size()== 0)
                      movie = arrayList_Fav_movie.get(position);
                 else
-                     movie = arrayList.get(position);
+                      movie = arrayList.get(position);
+
+
+                // selectPosterPathListener.setSelectedPosterPath(image);
 
 
                 String image = movie.getPosterPath();
@@ -85,7 +94,7 @@ public class MovieFragment extends Fragment {
                 Log.v("fid",ids);
 
 
-                // listener.setSelectedPosterPath(image);
+
                 Intent intent = new Intent(getActivity(), firstapp.myapplication.Detail.class);
                 intent.putExtra("i", image);//i=Key , image = value)
                 //i should put all images in arraylist

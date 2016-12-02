@@ -1,4 +1,4 @@
-//package firstapp.movie_app;
+//package firstapp.myapplication;
 //
 ///**
 // * Created by User on 17/11/2016.
