@@ -185,8 +185,8 @@ public class DetailFragment extends Fragment {
 
         //trailers part
         JsonTask2 jsonTask2 = new JsonTask2();
-        jsonTask2.execute("https://api.themoviedb.org/3/movie/" + idmovie + "/videos?api_key= "); //my api key : 6be3beeecf3e73c7baf052936de346da
-        //jsonTask2.execute("https://api.themoviedb.org/3/movie/" + idmovie + "/videos?api_key=6be3beeecf3e73c7baf052936de346da");
+        String api_key = "6be3beeecf3e73c7baf052936de346da";
+        jsonTask2.execute("https://api.themoviedb.org/3/movie/" + idmovie + "/videos?api_key="+api_key);
         //https://www.youtube.com/watch?v=FnZF82_3Cts
         //key example: FnZF82_3Cts
         Log.v("backid", idmovie);
@@ -329,9 +329,10 @@ public class DetailFragment extends Fragment {
 
             try {
                 Log.v("rev", "Started");
-                URL url = new URL("https://api.themoviedb.org/3/movie/" + idmovie + "/reviews?api_key=");
-                //my api key: 6be3beeecf3e73c7baf052936de346da
-               // URL url = new URL("https://api.themoviedb.org/3/movie/" + idmovie + "/reviews?api_key=6be3beeecf3e73c7baf052936de346da");
+                String api_key = "6be3beeecf3e73c7baf052936de346da";
+                URL url = new URL("https://api.themoviedb.org/3/movie/" + idmovie + "/reviews?api_key="+api_key);
+
+
                 connection = (HttpURLConnection) url.openConnection();
                 connection.setRequestMethod("GET");
                 connection.connect();

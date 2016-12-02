@@ -27,9 +27,6 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * A placeholder fragment containing a simple view.
- */
 public class MovieFragment extends Fragment  {
 
 
@@ -105,7 +102,8 @@ public class MovieFragment extends Fragment  {
         movieAdapter1.notifyDataSetChanged();
         gridView.setAdapter(movieAdapter1);
         JsonTask movieTask = new JsonTask();
-        movieTask.execute("https://api.themoviedb.org/3/movie/top_rated?api_key= "); //my api key : 6be3beeecf3e73c7baf052936de346da
+        String api_key = "6be3beeecf3e73c7baf052936de346da";
+        movieTask.execute("https://api.themoviedb.org/3/movie/top_rated?api_key="+api_key);
     }
 
     public void MostPopular() {
@@ -113,7 +111,8 @@ public class MovieFragment extends Fragment  {
         movieAdapter1.notifyDataSetChanged();
         gridView.setAdapter(movieAdapter1);
         JsonTask movieTask = new JsonTask();
-        movieTask.execute("https://api.themoviedb.org/3/movie/popular?api_key= "); //my api key : 6be3beeecf3e73c7baf052936de346da
+        String api_key = "6be3beeecf3e73c7baf052936de346da";
+        movieTask.execute("https://api.themoviedb.org/3/movie/popular?api_key="+api_key);
     }
 
 
