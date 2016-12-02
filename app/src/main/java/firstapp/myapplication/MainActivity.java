@@ -1,11 +1,12 @@
 package firstapp.myapplication;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 
-public class MainActivity extends AppCompatActivity  {
-    //implements SelectPosterPathListener
-boolean isTwopane;
+public class MainActivity extends AppCompatActivity implements SelectPosterPathListener  {
+
+boolean isTwopane =false;
     MovieFragment movieFragment = new MovieFragment();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -13,53 +14,52 @@ boolean isTwopane;
         setContentView(R.layout.activity_main);
 
         //set activity to be a listener to the fragment
-          //movieFragment.setPosterListener(this);
-        getSupportFragmentManager().beginTransaction().add(R.id.activity, movieFragment).commit();
+          movieFragment.setPosterListener(this);
+        if(getSupportFragmentManager().findFragmentById(R.id.activity) != null) {
+            getSupportFragmentManager().beginTransaction().replace(R.id.activity, movieFragment).commit();
+        }
+        else {
+            getSupportFragmentManager().beginTransaction().add(R.id.activity, movieFragment).commit();
+        }
 
-//        if(null!= findViewById(R.id.detail_activity))
-//            //tablet
-//        isTwopane = true;
-//        else
-//        {
-//            //mobile phone
-//
-//        }
+
+        //check of tablet
+        if(null!= findViewById(R.id.detail_activity))
+          isTwopane = true;
+
    }
 
-   // @Override
-   // public void setSelectedPosterPath(String image) {
 
 
+    @Override
+    public void setSelectedPosterPath(String image,String overview ,String release_date,String title , String vote_average , String ids) {
         //one pane
-       // if(!isTwopane) {
+        if(!isTwopane) {
 
-//        Intent intent = new Intent(getActivity(), firstapp.myapplication.Detail.class);
-//        intent.putExtra("i", image);//i=Key , image = value)
-//        //i should put all images in arraylist
-//        // intent.putExtra("imageID", ImageArray[position]);
-//        intent.putExtra("o", overview);
-//        intent.putExtra("r", release_date);
-//        intent.putExtra("t", title);
-//        intent.putExtra("a", vote_average);
-//        // intent.putExtra("video", video);
-//        intent.putExtra("id", ids);
-//
-//
-//        // getActivity().
-//        startActivity(intent);
-//    }
-//});
-//        }
-//       else {
-//
-//            //two pane
-//            DetailFragment detailFragment = new DetailFragment();
-//            Bundle extras = new Bundle();
-//            extras.putString("i",image);
-//            detailFragment.setArguments(extras);
-//            getSupportFragmentManager().beginTransaction().replace(R.id.detail_activity,movieFragment).commit();
-//        }
+            Intent intent = new Intent(MainActivity.this,Detail.class);
+            intent.putExtra("i", image);
+            intent.putExtra("o", overview);
+            intent.putExtra("r", release_date);
+            intent.putExtra("t", title);
+            intent.putExtra("a", vote_average);
+            intent.putExtra("id", ids);
+            startActivity(intent);
 
 
-  //  }
+        }
+        else {
+
+            //two pane
+            DetailFragment detailFragment = new DetailFragment();
+            Bundle extras = new Bundle();
+            extras.putString("i",image);
+            extras.putString("overview",overview);
+            extras.putString("r",release_date);
+            extras.putString("t",title);
+            extras.putString("v",vote_average);
+            extras.putString("id",ids);
+            detailFragment.setArguments(extras);
+            getSupportFragmentManager().beginTransaction().replace(R.id.detail_activity,detailFragment).commit();
+        }
+    }
 }

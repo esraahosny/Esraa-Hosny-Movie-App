@@ -11,9 +11,7 @@ import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
-/**
- * Created by User on 4/11/2016.
- */
+
 public class MovieAdapter1 extends BaseAdapter {
     //initialize context , arraylist
     private Context context;
@@ -52,33 +50,12 @@ public class MovieAdapter1 extends BaseAdapter {
          * this part means to detect the position
          * of image & load it in grid view
          */
-        String path = "http://image.tmdb.org/t/p/w185/";
+        String path = "http://image.tmdb.org/t/p/w500/";
         //http://image.tmdp.org/t/p/w185/     ( base url of images)
         Picasso.with(context).load(path + arrayList.get(position).getPosterPath()).into(image);
         return view;
 
     }}
 
-    /*public static void sortGrid(int order) {
-        Collections.sort(arrayList, new Sorter(order));
-        //adapter.notifyDataSetChanged();
-    }
 
-    //inner class
-    static class Sorter implements Comparator<Object> {
-        int order = -1;
-
-        Sorter(int order) {
-            this.order = order;
-        }
-
-        public int compare(Object obj1, Object obj2) {
-            if (obj1.toString().compareTo(obj2.toString()) == 0) {
-                return 0;
-            } else if (obj1.toString().compareTo(obj2.toString()) < 0) {
-                return order;
-            } else return (-1 * order);
-        }
-
-    }*/
 

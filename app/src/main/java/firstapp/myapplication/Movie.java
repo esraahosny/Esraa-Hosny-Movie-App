@@ -1,8 +1,5 @@
 package firstapp.myapplication;
 
-/**
- * Created by User on 23/10/2016.
- */
  public  class Movie {
 
     private String posterPath;
@@ -20,46 +17,8 @@ package firstapp.myapplication;
     private String video;
     private String vote_average;
 
-    //constructor1
 
-
-//    public Movie(JSONObject object) throws JSONException {
-//
-//
-//            posterPath=object.getString("poster_path");
-//            adult=object.getString("adult");
-   // }
-    //constructor2
-
-   // public Movie(String posterPath) {
-        //this.posterPath = posterPath;
-   // }
-
-    //constructor
-    /*public Movie(String adult, String backdrop_path, String genre_ids, String id, String original_language,
-                 String originalTitle, String overview, String popularity,
-                 String posterPath, String release_date, String title, String video, String vote_average, String vote_count) {
-
-
-        this.adult = adult;
-        this.backdrop_path = backdrop_path;
-        this.genre_ids = genre_ids;
-        this.id = id;
-        this.original_language = original_language;
-        this.originalTitle = originalTitle;
-        this.overview = overview;
-        this.popularity = popularity;
-        this.posterPath = posterPath;
-        this.release_date = release_date;
-        this.title = title;
-        this.video = video;
-        this.vote_average = vote_average;
-        this.vote_count = vote_count;
-    }
-*/
     //getters
-
-
 
     public String getAdult() {
         return adult;

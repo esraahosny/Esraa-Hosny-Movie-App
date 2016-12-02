@@ -1,8 +1,6 @@
 package firstapp.myapplication;
 
-/**
- * Created by User on 25/11/2016.
- */
+
 public class TrailerData {
 
     private String trailer_name;

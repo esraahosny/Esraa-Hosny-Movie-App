@@ -1,6 +1,5 @@
 package firstapp.myapplication;
 
-import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -41,11 +40,13 @@ public class MovieFragment extends Fragment  {
     ArrayList<Movie> arrayList_Fav_movie = new ArrayList<>();
     String ids;
 
-//    private SelectPosterPathListener selectPosterPathListener;
-//    void setPosterListener(SelectPosterPathListener selectPosterPathListener)
-//    {
-//        this.selectPosterPathListener = selectPosterPathListener;
-//    }
+    private SelectPosterPathListener selectPosterPathListener;
+
+
+    void setPosterListener(SelectPosterPathListener selectPosterPathListener)
+    {
+        this.selectPosterPathListener = selectPosterPathListener;
+    }
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -81,34 +82,14 @@ public class MovieFragment extends Fragment  {
                 else
                       movie = arrayList.get(position);
 
-
-                // selectPosterPathListener.setSelectedPosterPath(image);
-
-
                 String image = movie.getPosterPath();
                 String overview = movie.getOverview();
                 String release_date = movie.getRelease_date();
                 String title = movie.getTitle();
                 String vote_average = movie.getVote_average();
                 ids = movie.getId();
-                Log.v("fid",ids);
 
-
-
-                Intent intent = new Intent(getActivity(), firstapp.myapplication.Detail.class);
-                intent.putExtra("i", image);//i=Key , image = value)
-                //i should put all images in arraylist
-                // intent.putExtra("imageID", ImageArray[position]);
-                intent.putExtra("o", overview);
-                intent.putExtra("r", release_date);
-                intent.putExtra("t", title);
-                intent.putExtra("a", vote_average);
-                // intent.putExtra("video", video);
-                intent.putExtra("id", ids);
-
-
-                // getActivity().
-                startActivity(intent);
+                selectPosterPathListener.setSelectedPosterPath(image,overview,release_date,title,vote_average,ids);
             }
         });
         return v;
@@ -124,7 +105,7 @@ public class MovieFragment extends Fragment  {
         movieAdapter1.notifyDataSetChanged();
         gridView.setAdapter(movieAdapter1);
         JsonTask movieTask = new JsonTask();
-        movieTask.execute("https://api.themoviedb.org/3/movie/top_rated?api_key=6be3beeecf3e73c7baf052936de346da");
+        movieTask.execute("https://api.themoviedb.org/3/movie/top_rated?api_key= "); //my api key : 6be3beeecf3e73c7baf052936de346da
     }
 
     public void MostPopular() {
@@ -132,7 +113,7 @@ public class MovieFragment extends Fragment  {
         movieAdapter1.notifyDataSetChanged();
         gridView.setAdapter(movieAdapter1);
         JsonTask movieTask = new JsonTask();
-        movieTask.execute("https://api.themoviedb.org/3/movie/popular?api_key=6be3beeecf3e73c7baf052936de346da");
+        movieTask.execute("https://api.themoviedb.org/3/movie/popular?api_key= "); //my api key : 6be3beeecf3e73c7baf052936de346da
     }
 
 

@@ -10,14 +10,12 @@ import android.widget.TextView;
 
 import java.util.List;
 
-/**
- * Created by User on 18/11/2016.
- */
-public class MovieAdapter2 extends BaseAdapter {
+
+public class TrailerAdapter extends BaseAdapter {
     private Context context;
     private List<TrailerData> listVideos;
 
-    public MovieAdapter2(Context context , List<TrailerData> listVideos) {
+    public TrailerAdapter(Context context , List<TrailerData> listVideos) {
         super();
         this.context = context;
         this.listVideos = listVideos;

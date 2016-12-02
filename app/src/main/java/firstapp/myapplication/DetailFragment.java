@@ -2,7 +2,6 @@ package firstapp.myapplication;
 
 import android.annotation.TargetApi;
 import android.app.AlertDialog;
-import android.app.Fragment;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
@@ -10,6 +9,7 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -17,7 +17,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Button;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -39,15 +38,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class DetailFragment extends Fragment {
-    public MovieAdapter2 movieAdapter2;
+    public TrailerAdapter movieAdapter2;
     public List<TrailerData> listVideos = new ArrayList<>();
-    public MovieAdapter3 movieAdapter3;
     public List<ReviewsData> listReviews = new ArrayList<>();
     DataBaseFavourites dbf;
     String idmovie;
     TextView tvReviewData;
     String Poster_key;
-    FrameLayout trailersContainer;
+
 
     @TargetApi(Build.VERSION_CODES.M)
     @Override
@@ -66,9 +64,14 @@ public class DetailFragment extends Fragment {
     @Override
     public View onCreateView(final LayoutInflater inflater, final ViewGroup container, Bundle savedInstanceState) {
         final View view = inflater.inflate(R.layout.detail_item, container, false);
-        final Intent intent = getActivity().getIntent();       //intent Bundle to get data
-        idmovie = intent.getExtras().getString("id");
-              // image of each movie poster
+        //intent Bundle to get data
+        final Intent intent = getActivity().getIntent();
+        Bundle extras = intent.getExtras();
+        if(extras == null){
+            extras = getArguments();
+        }
+        idmovie = extras.getString("id");
+        // image of each movie poster
         ImageView posterpath = (ImageView) view.findViewById(R.id.posterpathtv);
         //text views of info from grid view
         TextView title = (TextView) view.findViewById(R.id.titletv);
@@ -77,34 +80,31 @@ public class DetailFragment extends Fragment {
         TextView voteAverage = (TextView) view.findViewById(R.id.vote_average);
         ListView lvTrailers = (ListView) view.findViewById(R.id.listViewVideo);
         tvReviewData = (TextView) view.findViewById(R.id.textViewReviews);
-        TextView reviewText = (TextView) view.findViewById(R.id.reviewText);
         Button starbutton = (Button) view.findViewById(R.id.starbutton);
         Button delete = (Button) view.findViewById(R.id.button2);
 
-        // Bundle sentBundle = getArguments();
-        // String name = sentBundle.getString("i");
 
 
-        Bundle bundle = getActivity().getIntent().getExtras();
-
-
-        final String image1 = "http://image.tmdb.org/t/p/w185/" + bundle.getString("i");
-        Poster_key = bundle.getString("i");
+        //Receive the sent Bundle
+        String image1 = "http://image.tmdb.org/t/p/w185/" + extras.getString("i");
+        Log.v("mmmm",image1);
+        Poster_key = extras.getString("i");
         Glide.with(getActivity()).load(image1).into(posterpath);
+
         //overview
-        final String overview1 = bundle.getString("o");
+        final String overview1 = extras.getString("o");
         overview.setText(overview1);
 
         //release date
-        final String release_date1 = bundle.getString("r");
+        final String release_date1 =extras.getString("r");
         release_date.setText(release_date1);
 
         //title
-        final String title1 = bundle.getString("t");
+        final String title1 = extras.getString("t");
         title.setText(title1);
 
         //vote_count
-        final String average = String.valueOf(bundle.getString("a"));
+        final String average = String.valueOf(extras.getString("a"));
         voteAverage.setText(average);
 
 
@@ -117,9 +117,6 @@ public class DetailFragment extends Fragment {
                 if (!db.Search_movie(idmovie)) {
                     boolean isInserted = dbf.insertData(idmovie, title1, release_date1, average, Poster_key, overview1);
                     Log.v("ifins", String.valueOf(isInserted));
-                } else {
-
-                    //  db.Delete_moview(idmovie);
                 }
             }
         });
@@ -149,7 +146,7 @@ public class DetailFragment extends Fragment {
             }
         });
 
-        movieAdapter2 = new MovieAdapter2(getActivity(), listVideos);
+        movieAdapter2 = new TrailerAdapter(getActivity(), listVideos);
         lvTrailers.setAdapter(movieAdapter2);
         lvTrailers.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -158,10 +155,12 @@ public class DetailFragment extends Fragment {
                 String SemiPartVideoUrl = trailerData.getKey();
                 Intent intent1 = new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.youtube.com/watch?v=" + SemiPartVideoUrl));
                 startActivity(intent1);
-                //Toast.makeText(getContext(),"trailer",Toast.LENGTH_SHORT).show();
+                //Toast.makeText(getContext(),"trailer",Toast.LENGTH_SHORT).show(); this line for check
             }
         });
 
+
+        //this method handles the scrolling in the listview in the details activity
        lvTrailers.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
@@ -170,9 +169,8 @@ public class DetailFragment extends Fragment {
                     case MotionEvent.ACTION_DOWN:
                         // Disallow ScrollView to intercept touch events.
                         v.getParent().requestDisallowInterceptTouchEvent(true);
+
                         break;
-
-
                     case MotionEvent.ACTION_UP:
                         // Allow ScrollView to intercept touch events.
                         v.getParent().requestDisallowInterceptTouchEvent(false);
@@ -187,8 +185,10 @@ public class DetailFragment extends Fragment {
 
         //trailers part
         JsonTask2 jsonTask2 = new JsonTask2();
-        jsonTask2.execute("https://api.themoviedb.org/3/movie/" + idmovie + "/videos?api_key=6be3beeecf3e73c7baf052936de346da");
+        jsonTask2.execute("https://api.themoviedb.org/3/movie/" + idmovie + "/videos?api_key= "); //my api key : 6be3beeecf3e73c7baf052936de346da
+        //jsonTask2.execute("https://api.themoviedb.org/3/movie/" + idmovie + "/videos?api_key=6be3beeecf3e73c7baf052936de346da");
         //https://www.youtube.com/watch?v=FnZF82_3Cts
+        //key example: FnZF82_3Cts
         Log.v("backid", idmovie);
         //  Log.i("Esraa", String.valueOf(listVideos.get(1)));
 
@@ -218,7 +218,6 @@ public class DetailFragment extends Fragment {
             try {
                 URL url = new URL(params[0]);
                 Log.v("nnnn1", url.toString());
-                //"https://api.themoviedb.org/3/movie/popular?api_key=6be3beeecf3e73c7baf052936de346da"
                 connection = (HttpURLConnection) url.openConnection();
                 connection.setRequestMethod("GET");
                 connection.connect();
@@ -312,13 +311,12 @@ public class DetailFragment extends Fragment {
         protected void onPostExecute(List<TrailerData> trailerDatas) {
             super.onPostExecute(trailerDatas);
             movieAdapter2.notifyDataSetChanged();
-            // movieAdapter2 = new MovieAdapter2(getActivity(), listVideos);
+
         }
     }
 
     public class JsonTask3 extends AsyncTask<String, Void, List<ReviewsData>> {
         private final String LOG = JsonTask2.class.getSimpleName();
-
 
         //doInBackground part contains connection + url of api + exception handlers
         protected List<ReviewsData> doInBackground(String... params) {
@@ -331,7 +329,9 @@ public class DetailFragment extends Fragment {
 
             try {
                 Log.v("rev", "Started");
-                URL url = new URL("https://api.themoviedb.org/3/movie/" + idmovie + "/reviews?api_key=6be3beeecf3e73c7baf052936de346da");
+                URL url = new URL("https://api.themoviedb.org/3/movie/" + idmovie + "/reviews?api_key=");
+                //my api key: 6be3beeecf3e73c7baf052936de346da
+               // URL url = new URL("https://api.themoviedb.org/3/movie/" + idmovie + "/reviews?api_key=6be3beeecf3e73c7baf052936de346da");
                 connection = (HttpURLConnection) url.openConnection();
                 connection.setRequestMethod("GET");
                 connection.connect();

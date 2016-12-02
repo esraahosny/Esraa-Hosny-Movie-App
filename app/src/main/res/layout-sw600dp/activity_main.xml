@@ -6,18 +6,18 @@
     android:fitsSystemWindows="true"
     tools:context="firstapp.myapplication.MainActivity">
 
-    <!--<FrameLayout-->
-        <!--android:layout_width="0dp"-->
-        <!--android:layout_weight="0.3"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:id="@+id/activity">-->
-    <!--</FrameLayout>-->
-    <!--<FrameLayout-->
-        <!--android:layout_width="0dp"-->
-        <!--android:layout_weight="0.5"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:id="@+id/detail_activity"-->
-        <!--android:background="#f9fbfb">-->
-    <!--</FrameLayout>-->
+    <FrameLayout
+        android:layout_width="0dp"
+        android:layout_weight="0.3"
+        android:layout_height="wrap_content"
+        android:id="@+id/activity">
+    </FrameLayout>
+    <FrameLayout
+        android:layout_width="0dp"
+        android:layout_weight="0.7"
+        android:layout_height="wrap_content"
+        android:id="@+id/detail_activity"
+        android:background="#f9fbfb">
+    </FrameLayout>
 
 </RelativeLayout>
